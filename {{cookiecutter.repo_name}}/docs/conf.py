@@ -11,7 +11,8 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import sys, os
+import sys
+import os
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -24,6 +25,26 @@ sys.path.insert(0, parent)
 
 import {{ cookiecutter.repo_name }}
 
+# Add rtd here
+
+# -- Tweaks --------------------------------------------------------------------
+
+
+# From jam99@cornell.edu, following advice at http://stackoverflow.com/a/5599712
+def skip(app, what, name, obj, skip, options):
+    if name in ["__repr__", "__init__"]:
+        return False
+    return skip
+
+
+def setup(app):
+    app.connect("autodoc-skip-member", skip)
+
+# From jam99@cornell.edu
+# http://sphinx-doc.org/ext/autodoc.html#confval-autodoc_member_order
+autodoc_member_order = 'bysource'
+
+
 # -- General configuration -----------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
@@ -31,7 +52,8 @@ import {{ cookiecutter.repo_name }}
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.viewcode']
+extensions = ['sphinx.ext.autodoc', 'sphinx.ext.coverage',
+              'sphinx.ext.mathjax', 'sphinx.ext.viewcode']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -252,3 +274,11 @@ texinfo_documents = [
 
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 #texinfo_no_detailmenu = False
+
+# Allows links to other python package documentation directly.
+# See http://sphinx-doc.org/ext/intersphinx.html
+intersphinx_mapping = {
+    'python': ('https://docs.python.org/2.7', None),
+    'numpy': ('http://docs.scipy.org/doc/numpy', None),
+    'scipy': ('http://docs.scipy.org/doc/scipy', None)
+}

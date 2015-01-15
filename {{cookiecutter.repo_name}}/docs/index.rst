@@ -12,10 +12,8 @@ Contents:
    :maxdepth: 2
 
    installation
-   usage
    contributing
    authors
-   history
 
 Feedback
 ========

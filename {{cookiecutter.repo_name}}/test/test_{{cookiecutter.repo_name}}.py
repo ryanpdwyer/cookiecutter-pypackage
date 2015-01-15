@@ -1,19 +1,18 @@
+# -*- coding: utf-8 -*-
 """
 Tests for `{{ cookiecutter.repo_name }}` module.
 """
-import pytest
-from {{ cookiecutter.repo_name }} import {{ cookiecutter.repo_name }}
+import unittest
+import {{ cookiecutter.repo_name }}
 
 
-class Test{{ cookiecutter.repo_name|capitalize }}(object):
+class Test{{ cookiecutter.repo_name|capitalize }}(unittest.TestCase):
 
-    @classmethod
-    def setup_class(cls):
+    def setUp(self):
         pass
 
     def test_something(self):
         pass
 
-    @classmethod
-    def teardown_class(cls):
+    def tearDown(self):
         pass

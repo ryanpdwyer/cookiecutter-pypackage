@@ -2,12 +2,12 @@
 Installation
 ============
 
-At the command line either via easy_install or pip::
+At the command line via pip::
 
-    $ easy_install {{ cookiecutter.repo_name }}
     $ pip install {{ cookiecutter.repo_name }}
 
-Or, if you have virtualenvwrapper installed::
+Or install the latest GitHub version using::
 
-    $ mkvirtualenv {{ cookiecutter.repo_name }}
-    $ pip install {{ cookiecutter.repo_name }}
+    $ git clone https://github.com/{ cookiecutter.github_username }}/{{ cookiecutter.repo_name }}.git
+    $ cd {{ cookiecutter.repo_name }}
+    $ python setup.py install
