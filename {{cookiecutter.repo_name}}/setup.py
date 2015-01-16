@@ -30,8 +30,12 @@ setup(
     include_package_data=True,
     # This lets setuptools include_package_data work with git
     setup_requires=["setuptools_git >= 0.3"],
-    packages=find_packages(),
+    packages=find_packages({{ cookiecutter.repo_name }}),
+
+    # Add requirements here. If the requirement is difficult to install,
+    # add to docs/conf.py MAGIC_MOCK, and .travis.yml 'conda install ...'
     install_requires=[],
+
     tests_require=['nose'],
     test_suite='nose.collector',
     keywords='{{ cookiecutter.repo_name }}',
