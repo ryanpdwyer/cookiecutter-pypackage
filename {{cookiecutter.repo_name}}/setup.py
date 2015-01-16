@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import sys
+import io
 
 try:
     from setuptools import setup, find_packages
@@ -7,12 +8,14 @@ except ImportError:
     print("Please install or upgrade setuptools or pip")
     sys.exit(1)
 
-readme = open('README.rst').read()
+readme = io.open('README.rst', mode='r', encoding='utf-8').read()
 doclink = """
 Documentation
 -------------
 
 The full documentation is at http://{{ cookiecutter.repo_name }}.rtfd.org."""
+history = io.open('HISTORY.rst', mode='r',
+                  encoding='utf-8').read().replace('.. :changelog:', '')
 
 setup(
     name='{{ cookiecutter.repo_name }}',
