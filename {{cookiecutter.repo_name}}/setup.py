@@ -1,18 +1,11 @@
-#!/usr/bin/env python
-
-import os
+# -*- coding: utf-8 -*-
 import sys
 
 try:
     from setuptools import setup, find_packages
 except ImportError:
     print("Please install or upgrade setuptools or pip")
-    raise
-
-
-if sys.argv[-1] == 'publish':
-    os.system('python setup.py sdist upload')
-    sys.exit()
+    sys.exit(1)
 
 readme = open('README.rst').read()
 doclink = """
