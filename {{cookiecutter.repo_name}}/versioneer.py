@@ -753,12 +753,15 @@ def get_version(verbose=False):
 def git2pep440(ver_str):
     try:
         ver_parts = ver_str.split('-', 2)
+        if len(ver_parts) == 1:
+            return ver_parts[0]
+        elif len(ver_parts) == 2:
+            commits = 0
+        elif len(ver_parts) == 3:
+            commits = ver_parts[1]
+
         tag = ver_parts[0]
         hash_dirty = ver_parts[-1]
-        if len(ver_parts) == 3:
-            commits = ver_parts[1]
-        else:
-            commits = 0
 
         return "{tag}.{release_type_string}{commits}+{hash_dirty}".format(
             tag=tag,
