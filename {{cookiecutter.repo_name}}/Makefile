@@ -1,4 +1,9 @@
 # Makefile for {{ cookiecutter.repo_name }}
+PKG_NAME={{ cookiecutter.repo_name }}
+PKG_DIR={{ cookiecutter.repo_name }}
+
+VERSION := $(shell python setup.py --version)
+
 help:
 	@echo "clean-build	remove build artifacts"
 	@echo "clean-pyc	remove Python file artifacts"
@@ -28,7 +33,7 @@ test:
 	python setup.py test
 
 coverage:
-	coverage run --source {{ cookiecutter.repo_name }} setup.py test
+	coverage run --source $(PKD_DIR) setup.py test
 	coverage report -m
 	coverage html
 	open htmlcov/index.html
@@ -38,13 +43,25 @@ docs:
 	$(MAKE) -C docs html
 	open docs/_build/html/index.html
 
-release: clean
-	python setup.py sdist upload
-	python setup.py bdist_wheel upload
+release: clean test check-version
+	python setup.py sdist bdist_wheel
+	twine upload dist/*
 
-sdist: clean
-	python setup.py sdist
-	python setup.py bdist_wheel upload
-	ls -l dist
+# Check version string for PEP440 compatibility
+# The regular expression used to do the check is taken from pip
+# See https://github.com/pypa/pip/search?utf8=✓&q=pep440
+PEP440=$(shell [[ $(VERSION) =~ ^v?(\d+)((a|b|c|rc)(\d+))?$$ ]] && echo "yes" || echo "no")
+ifeq (no,$(PEP440))
+check-version:
+	$(error "Not a valid PEP440 version ($(VERSION)). Run git tag and try again.")
+else
+check-version:
+	@echo "Version okay."
+endif
+
+# Helper if you need to figure out what packages are being imported
+# Useful if Read the Docs is failing and you need to mock out more dependencies
+find-imports:
+	find $(PKG_DIR) -name "*.py" -exec fgrep "import" {} \; |  egrep '^(\s*)(import|from)' | sed 's/^\s+//' | tr -s ' ' | cut -d " " -f 2 | fgrep -v $(PKG_NAME) | sort -u | uniq
 
 .PHONY: help clean clean-pyc clean-build list test coverage docs release sdist
