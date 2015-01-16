@@ -51,16 +51,16 @@ release: clean test check-version check-version-tag
 # Check version string for PEP440 compatibility
 # Requires the packaging package (pip install packaging)
 check-version:
-	python -c "from packaging.version import Version; Version('$VERSION')"
+	python -c "from packaging.version import Version; Version('$(VERSION)')"
 	@echo "Version okay."
 
-+ifeq ($(VERSION),$(GIT_VERSION_TAG))
-+check-version-tag:
-+       @echo "git tag okay"
-+else
-+check-version-tag:
-+       $(error "git tag ($(GIT_VERSION_TAG)) does not match setup.py version ($(VERSION))")
- endif
+ifeq ($(VERSION),$(GIT_VERSION_TAG))
+check-version-tag:
+	@echo "git tag okay"
+else
+check-version-tag:
+	$(error "git tag ($(GIT_VERSION_TAG)) does not match setup.py version ($(VERSION))")
+endif
 
 # Helper if you need to figure out what packages are being imported
 # Useful if Read the Docs is failing and you need to mock out more dependencies

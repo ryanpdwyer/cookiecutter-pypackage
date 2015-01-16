@@ -1,2 +1,3 @@
 include versioneer.py
 include {{ cookiecutter.repo_name }}/_version.py
+include {{ cookiecutter.repo_name }}/_version.py
