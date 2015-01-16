@@ -3,6 +3,7 @@ PKG_NAME={{ cookiecutter.repo_name }}
 PKG_DIR={{ cookiecutter.repo_name }}
 
 VERSION := $(shell python setup.py --version)
+GIT_VERSION_TAG := $(shell git describe --tags --dirty --always)
 
 help:
 	@echo "clean-build	remove build artifacts"
@@ -43,25 +44,27 @@ docs:
 	$(MAKE) -C docs html
 	open docs/_build/html/index.html
 
-release: clean test check-version
+release: clean test check-version check-version-tag
 	python setup.py sdist bdist_wheel
 	twine upload dist/*
 
 # Check version string for PEP440 compatibility
-# The regular expression used to do the check is taken from pip
-# See https://github.com/pypa/pip/search?utf8=✓&q=pep440
-PEP440=$(shell [[ $(VERSION) =~ ^v?(\d+)((a|b|c|rc)(\d+))?$$ ]] && echo "yes" || echo "no")
-ifeq (no,$(PEP440))
+# Requires the packaging package (pip install packaging)
 check-version:
-	$(error "Not a valid PEP440 version ($(VERSION)). Run git tag and try again.")
-else
-check-version:
+	python -c "from packaging.version import Version; Version('$VERSION')"
 	@echo "Version okay."
-endif
+
++ifeq ($(VERSION),$(GIT_VERSION_TAG))
++check-version-tag:
++       @echo "git tag okay"
++else
++check-version-tag:
++       $(error "git tag ($(GIT_VERSION_TAG)) does not match setup.py version ($(VERSION))")
+ endif
 
 # Helper if you need to figure out what packages are being imported
 # Useful if Read the Docs is failing and you need to mock out more dependencies
 find-imports:
 	find $(PKG_DIR) -name "*.py" -exec fgrep "import" {} \; |  egrep '^(\s*)(import|from)' | sed 's/^\s+//' | tr -s ' ' | cut -d " " -f 2 | fgrep -v $(PKG_NAME) | sort -u | uniq
 
-.PHONY: help clean clean-pyc clean-build list test coverage docs release sdist
+.PHONY: help clean clean-pyc clean-build list test coverage docs release check-version check-version-tag
