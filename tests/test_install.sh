@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# This script assumes we have cookiecutter, sphinx on our path already
+# This script assumes we have cookiecutter, sphinx, setuptools_git on our path already
 
 # Cross-platform temporary directory
 # See http://unix.stackexchange.com/a/84980/100136
@@ -29,6 +29,7 @@ expversion="0.1"
 if [[ "$version" != "$expversion" ]]; then
     echo "package version $version != $expversion"; exit 1;
 fi
+
 python setup.py install
 python setup.py test
 
