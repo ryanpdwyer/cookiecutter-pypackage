@@ -34,7 +34,7 @@ test:
 	python setup.py test
 
 coverage:
-	coverage run --source $(PKD_DIR) setup.py test
+	coverage run --source $(PKG_DIR) setup.py test
 	coverage report -m
 	coverage html
 	open htmlcov/index.html
@@ -54,12 +54,18 @@ check-version:
 	python -c "from packaging.version import Version; Version('$(VERSION)')"
 	@echo "Version okay."
 
+# The read, continue portion of this code was modified from
+# http://stackoverflow.com/a/14316012
 ifeq ($(VERSION),$(GIT_VERSION_TAG))
 check-version-tag:
 	@echo "git tag okay"
 else
 check-version-tag:
-	$(error "git tag ($(GIT_VERSION_TAG)) does not match setup.py version ($(VERSION))")
+	@read -r -p "Git tag ($(GIT_VERSION_TAG)) does not match version ($(VERSION)). Continue? [y/N] " CONTINUE;\
+	if [ ! $$CONTINUE == "y" ] && [ ! $$CONTINUE == "Y" ]; then \
+	echo "Exiting" ; exit 1 ; \
+	fi
+	@echo "Proceeding"
 endif
 
 # Helper if you need to figure out what packages are being imported
