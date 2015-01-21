@@ -10,8 +10,12 @@ python:
   - "pypy"
   - "pypy3"
 
+before_install:
+    - git config --global user.name "Test"
+    - git config --global user.email "test@test.com"
+
 install:
-  - pip install cookiecutter sphinx mock
+  - pip install cookiecutter sphinx mock unittest2
 
 script:
   - bash tests/test_install.sh
