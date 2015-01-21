@@ -20,6 +20,9 @@ git init
 git add -A
 git commit -am "Test commit"
 git tag 0.1
+
+# Using home-spun testing code here, exiting if the string
+# comparison is different from what we expect
 version="$(python setup.py --version)"
 echo "$version"
 expversion="0.1"
