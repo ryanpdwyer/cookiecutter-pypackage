@@ -57,15 +57,34 @@ def version():
 @task(default=True)
 def help():
     print("""
-Commands:
+Usage:  inv[oke] [--core-opts] task1 [--task1-opts] ... taskN [--taskN-opts]
+
+Tasks:
+
+docs            build the docs and open in a webbrowser
+build_docs      build the docs
 clean           Remove compiled python files, build directories
 test            Run tests for package (python setup.py test)
 release         Upload to PyPI after running tests and checking version number
-""")
+
+To see more about a specific task, run invoke --help task""")
+
+
+@task
+def docs():
+    """Use the docs subdirectory tasks.py to build and open docs."""
+    subprocess.call(['invoke', '-r', 'docs', 'html', 'open'])
+
+
+@task
+def build_docs():
+    """Just build the docs using Sphinx, don't open in a browser"""
+    subprocess.call(['invoke', '-r', 'docs', 'html'])
 
 
 @task
 def clean():
+    """Remove build directories, compiled python files"""
     rm_rf('dist')
     rm(*cwd.rglob("*.py[cod]"))
 
@@ -77,6 +96,7 @@ def clean():
 
 @task
 def test():
+    """Test the package using python setup.py test"""
     if subprocess.call(['python', 'setup.py', 'test']) != 0:
         raise ValueError("Tests failed.")
 
