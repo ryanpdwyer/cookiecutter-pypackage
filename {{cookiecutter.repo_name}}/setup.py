@@ -32,7 +32,7 @@ setup(
     name='{{ cookiecutter.repo_name }}',
     version=versioneer.get_version(),
     description='{{ cookiecutter.project_short_description }}',
-    long_description=readme + '\n\n' + doclink + '\n\n',
+    long_description=readme + '\n\n' + doclink + '\n\n' + history,
     license='MIT',
     author='{{ cookiecutter.full_name }}',
     author_email='{{ cookiecutter.email }}',
