@@ -1,6 +1,6 @@
 # Makefile for {{ cookiecutter.repo_name }}
-PKG_NAME={{ cookiecutter.repo_name }}
-PKG_DIR={{ cookiecutter.repo_name }}
+PKG_NAME={{cookiecutter.repo_name}}
+PKG_DIR={{cookiecutter.repo_name}}
 
 VERSION := $(shell python setup.py --version)
 GIT_VERSION_TAG := $(shell git describe --tags --dirty --always)
@@ -18,9 +18,9 @@ help:
 clean: clean-build clean-pyc
 
 clean-build:
-	rm -fr build/
-	rm -fr dist/
-	rm -fr *.egg-info
+	rm -rf build/
+	rm -rf dist/
+	rm -rf *.egg-info
 
 clean-pyc:
 	find . -name '*.pyc' -exec rm -f {} +
@@ -28,7 +28,7 @@ clean-pyc:
 	find . -name '*~' -exec rm -f {} +
 
 lint:
-	flake8 {{ cookiecutter.repo_name }} test
+	flake8 {{ cookiecutter.repo_name }}
 
 test:
 	python setup.py test
@@ -39,6 +39,7 @@ coverage:
 	coverage html
 	open htmlcov/index.html
 
+# Note: open command is Mac only
 docs:
 	$(MAKE) -C docs clean
 	$(MAKE) -C docs html
