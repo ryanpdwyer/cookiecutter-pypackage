@@ -6,5 +6,5 @@ TODO
 Improve cross-platform capabilities
 -----------------------------------
 
-- [ ] Use python shell / Popen commands to mimic important shell commands
-- [ ] Switch fabfile in docs to an invoke tasks file
+- [ ] Switch the tests to use python rather than a bash script
+- [x] Switch fabfile in docs to an invoke tasks file
