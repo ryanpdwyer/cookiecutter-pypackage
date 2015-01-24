@@ -33,6 +33,5 @@ fi
 python setup.py install
 python setup.py test
 
-# Let's not try building the docs like this; it isn't even cross-platform
-# between Linux and Mac
-# make docs
+# See what happens if we try to build the docs
+invoke build_docs

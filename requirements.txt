@@ -1,0 +1,13 @@
+cookiecutter
+Sphinx
+mock
+unittest2
+setuptools_git
+sphinx_rtd_theme
+packaging
+invoke
+pathlib
+six
+subprocess32
+wheel
+twine 
