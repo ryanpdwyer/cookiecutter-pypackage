@@ -8,6 +8,5 @@ packaging
 invoke
 pathlib
 six
-subprocess32
 wheel
 twine
