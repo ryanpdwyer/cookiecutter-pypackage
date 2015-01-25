@@ -73,13 +73,15 @@ To see more about a specific task, run invoke --help task""")
 @task
 def docs():
     """Use the docs subdirectory tasks.py to build and open docs."""
-    subprocess.call(['invoke', '-r', 'docs', 'html', 'open'])
+    os.chdir('docs')
+    subprocess.call(['invoke', 'html', 'open'])
 
 
 @task
 def build_docs():
     """Just build the docs using Sphinx, don't open in a browser"""
-    subprocess.call(['invoke', '-r', 'docs', 'html'])
+    os.chdir('docs')
+    subprocess.call(['invoke', 'html'])
 
 
 @task
