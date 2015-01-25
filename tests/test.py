@@ -6,7 +6,7 @@ import os
 import tempfile
 import shutil
 import pathlib
-
+import platform
 
 try:
     import unittest2 as unittest
@@ -17,6 +17,10 @@ try:
     from subprocess32 import check_output
 except ImportError:
     from subprocess import check_output
+
+windows = platform.system() == 'Windows'
+
+git = 'git.cmd' if windows else 'git'
 
 
 def rm_rf(*args):
@@ -41,10 +45,10 @@ class TestCookieCutterSciPackage(unittest.TestCase):
         check_output(['cookiecutter', str(self.cookiecutter_dir),
                       '--no-input'])
         os.chdir('myscipkg')
-        check_output(['git', 'init'])
-        check_output(['git', 'add', '-A'])
-        check_output(['git', 'commit', '-a', '-m', 'Test commit'])
-        check_output(['git', 'tag', '0.1'])
+        check_output([git, 'init'])
+        check_output([git, 'add', '-A'])
+        check_output([git, 'commit', '-a', '-m', 'Test commit'])
+        check_output([git, 'tag', '0.1'])
 
         version = check_output(['python', 'setup.py', '--version']).strip('\n').encode('utf-8')
         print(version)

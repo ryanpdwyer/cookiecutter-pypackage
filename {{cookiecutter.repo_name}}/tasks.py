@@ -22,6 +22,8 @@ except ImportError:
 
 windows = platform.system() == 'Windows'
 
+git = 'git.cmd' if windows else 'git'
+
 cwd = pathlib.Path('.')
 
 
@@ -46,7 +48,7 @@ def rm(*args):
 
 # Helper functions for getting version numbers
 def git_describe():
-    return subprocess.check_output(['git', 'describe',
+    return subprocess.check_output([git, 'describe',
                                     '--tags', '--dirty', '--always'])
 
 
