@@ -50,8 +50,8 @@ class TestCookieCutterSciPackage(unittest.TestCase):
         check_output([git, 'commit', '-a', '-m', 'Test commit'])
         check_output([git, 'tag', '0.1'])
 
-        version = check_output(['python', 'setup.py', '--version']).strip('\n').encode('utf-8')
-        print(version)
+        version_bytes = check_output(['python', 'setup.py', '--version'])
+        version = version_bytes.decode('utf-8').strip('\n')
         expversion = '0.1'
         self.assertEqual(version, expversion)
 
