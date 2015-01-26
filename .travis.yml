@@ -3,17 +3,19 @@ language: python
 
 # Disable python3 for now; we can add it back later
 python:
-  - "2.6"
   - "2.7"
-#  - "3.3"
-#  - "3.4"
+  - "3.4"
 
 before_install:
     - git config --global user.name "Test"
     - git config --global user.email "test@test.com"
 
 install:
-  - pip install -r requirements.txt
+  - if [[ $TRAVIS_PYTHON_VERSION == "2.7" ]]; then
+      pip install -r python27.txt;
+    else
+      pip install -r python3.txt;
+    fi
 
 script:
   - python tests/test.py

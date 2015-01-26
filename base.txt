@@ -1,12 +1,9 @@
 cookiecutter
-Sphinx
-mock
-unittest2
 setuptools_git
+Sphinx
 sphinx_rtd_theme
 packaging
 invoke
-pathlib
 six
 wheel
 twine

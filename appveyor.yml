@@ -3,6 +3,7 @@ build: false
 environment:
   matrix:
     - PYTHON: "C:/Python27"
+    - PYTHON: "C:/Python34"
 init:
   - "ECHO %PYTHON%"
   - "ECHO %COMSPEC%"
@@ -12,7 +13,13 @@ init:
 install:
   - ps: (new-object net.webclient).DownloadFile('https://raw.github.com/pypa/pip/master/contrib/get-pip.py', 'C:/get-pip.py')
   - "%PYTHON%/python.exe C:/get-pip.py"
-  - "%PYTHON%/Scripts/pip.exe install -r requirements.txt"
-  - "ECHO "
+  - ps: If (%PYTHON% -like "*27") {
+        %PYTHON%/Scripts/pip.exe install -r py27.txt
+      }
+      Else
+      {
+        %PYTHON%/Scripts/pip.exe install -r python3.txt
+      }
+
 test_script:
   - "%PYTHON%/python.exe tests/test.py"
