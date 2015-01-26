@@ -14,11 +14,11 @@ install:
   - ps: (new-object net.webclient).DownloadFile('https://raw.github.com/pypa/pip/master/contrib/get-pip.py', 'C:/get-pip.py')
   - "%PYTHON%/python.exe C:/get-pip.py"
   - ps: If ($PYTHON -like "*27") {
-        $PYTHON/Scripts/pip.exe install -r py27.txt
+        "$PYTHON/Scripts/pip.exe install -r py27.txt"
       }
       Else
       {
-        $PYTHON/Scripts/pip.exe install -r python3.txt
+        "$PYTHON/Scripts/pip.exe install -r python3.txt"
       }
 
 test_script:
