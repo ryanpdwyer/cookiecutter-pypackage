@@ -13,10 +13,8 @@ try:
 except ImportError:
     import unittest
 
-try:
-    from subprocess32 import check_output
-except ImportError:
-    from subprocess import check_output
+
+from invoke import run
 
 windows = platform.system() == 'Windows'
 
@@ -42,22 +40,22 @@ class TestCookieCutterSciPackage(unittest.TestCase):
 
     def test_integration(self):
         os.chdir(str(self.dir))
-        check_output(['cookiecutter', str(self.cookiecutter_dir),
-                      '--no-input'])
+        run('cookiecutter "{0}" --no-input'.format(str(self.cookiecutter_dir)))
         os.chdir('myscipkg')
-        check_output([git, 'init'])
-        check_output([git, 'add', '-A'])
-        check_output([git, 'commit', '-a', '-m', 'Test commit'])
-        check_output([git, 'tag', '0.1'])
+        run('git init')
+        run('git add -A')
+        run('git commit -a -m "Test commit"')
+        run('git tag 0.1')
 
-        version_bytes = check_output(['python', 'setup.py', '--version'])
-        version = version_bytes.decode('utf-8').strip('\n')
+        run('python setup.py install')
+
+        version_out = run('python setup.py --version')
+        version = version_out.stdout.strip('\n').strip('\r')
         expversion = '0.1'
         self.assertEqual(version, expversion)
 
-        check_output(['python', 'setup.py', 'install'])
-        check_output(['python', 'setup.py', 'test'])
-        check_output(['invoke', 'build_docs'])
+        run('python setup.py test')
+        run('invoke build_docs')
 
 
 if __name__ == '__main__':
