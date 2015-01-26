@@ -6,19 +6,13 @@
 # :ref: http://ipython.org/ipython-doc/1/interactive/nbconvert.html
 
 
-import os
 import shutil
-
-try:
-    import subprocess32 as subprocess
-except ImportError:
-    import subprocess
 
 import pathlib
 import webbrowser
 
 
-from invoke import task
+from invoke import task, run
 
 cwd = pathlib.Path('.').absolute()
 
@@ -61,8 +55,8 @@ def clean():
 def html():
     """Create sphinx documentation as stand-alone HTML files."""
 
-    subprocess.call(['sphinx-build', '-b', 'html', str(cwd),
-        str(cwd/'_build/html')])
+    run('sphinx-build -b html "{0}" "{1}"'.format(str(cwd),
+        str(cwd/'_build/html')))
     print("Build finished; see _build/html/index.html")
 
 

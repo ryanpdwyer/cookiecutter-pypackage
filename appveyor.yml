@@ -5,15 +5,12 @@ environment:
     - PYTHON: "C:/Python27"
     - PYTHON: "C:/Python34"
 init:
-  - set PATH=%PATH%;%PYTHON%;%PYTHON%\Scripts
-  - "ECHO %PYTHON%"
-  - ps: "echo $PYTHON"
+  - set PATH=%PYTHON%;%PYTHON%\Scripts;%PATH%
+  - "ECHO %PATH%"
   - ps: "ls C:/Python*"
   - "git config --global user.email 'foo@example.com'"
   - "git config --global user.name 'foo'"
 install:
-  - ps: (new-object net.webclient).DownloadFile('https://raw.github.com/pypa/pip/master/contrib/get-pip.py', 'C:/get-pip.py')
-  - "%PYTHON%/python.exe C:/get-pip.py"
   - ps: If ($Env:PYTHON -like "*27") {
         $Env:REQUIREMENT_FILE="python27.txt"
       }
@@ -22,6 +19,5 @@ install:
         $Env:REQUIREMENT_FILE="python3.txt"
       }
   - "pip install -r %REQUIREMENT_FILE%"
-
 test_script:
   - "python tests/test.py"

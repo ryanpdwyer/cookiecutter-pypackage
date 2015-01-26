@@ -8,21 +8,11 @@
 
 import os
 import shutil
-import platform
 
 import pathlib
 import packaging.version
 from six.moves import input
-from invoke import task
-
-try:
-    import subprocess32 as subprocess
-except ImportError:
-    import subprocess
-
-windows = platform.system() == 'Windows'
-
-git = 'git.cmd' if windows else 'git'
+from invoke import task, run
 
 cwd = pathlib.Path('.')
 
@@ -48,12 +38,13 @@ def rm(*args):
 
 # Helper functions for getting version numbers
 def git_describe():
-    return subprocess.check_output([git, 'describe',
-                                    '--tags', '--dirty', '--always'])
+    result = run('git describe --tags --dirty --always')
+    return result.stdout
 
 
 def version():
-    return subprocess.check_output(['python', 'setup.py', '--version'])
+    result = run('python setup.py --version')
+    return result.stdout
 
 
 @task(default=True)
@@ -76,14 +67,14 @@ To see more about a specific task, run invoke --help task""")
 def docs():
     """Use the docs subdirectory tasks.py to build and open docs."""
     os.chdir('docs')
-    subprocess.call(['invoke', 'html', 'open'])
+    run('invoke html open')
 
 
 @task
 def build_docs():
     """Just build the docs using Sphinx, don't open in a browser"""
     os.chdir('docs')
-    subprocess.call(['invoke', 'html'])
+    run('invoke html')
 
 
 @task
@@ -101,8 +92,7 @@ def clean():
 @task
 def test():
     """Test the package using python setup.py test"""
-    if subprocess.call(['python', 'setup.py', 'test']) != 0:
-        raise ValueError("Tests failed.")
+    run('python setup.py test')
 
 
 @task
@@ -135,5 +125,5 @@ def check_version_tag():
 def release():
     """Check that tests pass, the version is correct, then build source, wheel
     distributions, upload to PyPI using twine."""
-    subprocess.call(['python', 'setup.py', 'sdist', 'bdist_wheel'])
-    subprocess.call(['twine', 'upload', 'dist/*'])
+    run('python setup.py sdist bdist_wheel')
+    run('twine upload dist/*')
