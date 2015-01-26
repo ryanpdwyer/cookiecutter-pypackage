@@ -5,6 +5,7 @@ environment:
     - PYTHON: "C:/Python27"
     - PYTHON: "C:/Python34"
 init:
+  - set PATH=%PATH%;%PYTHON%;%PYTHON%\Scripts
   - "ECHO %PYTHON%"
   - ps: "echo $PYTHON"
   - ps: "ls C:/Python*"
@@ -20,7 +21,7 @@ install:
       {
         $Env:REQUIREMENT_FILE="python3.txt"
       }
-  - "%PYTHON%/Scripts/pip.exe install -r %REQUIREMENT_FILE%"
+  - "pip install -r %REQUIREMENT_FILE%"
 
 test_script:
-  - "%PYTHON%/python.exe tests/test.py"
+  - "python tests/test.py"
