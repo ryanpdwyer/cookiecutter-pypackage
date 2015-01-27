@@ -34,9 +34,10 @@ Don't worry, you have options:
 Similar Cookiecutter Templates
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-* `audreyr/cookiecutter-pypackage`_: The original pypackage, uses unittest for
+- `audreyr/cookiecutter-pypackage`_: The original pypackage, uses unittest for
    testing and other minor changes.
-* `Nekroze/cookiecutter-pypackage`_: The project this project is based off of.
+
+- `Nekroze/cookiecutter-pypackage`_: The template this project is based on.
 
 Fork This
 ~~~~~~~~~
