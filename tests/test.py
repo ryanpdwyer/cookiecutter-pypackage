@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import (division, print_function,
-                        absolute_import, unicode_literals)
+                        absolute_import)
 
 import os
 import tempfile
@@ -13,12 +13,64 @@ try:
 except ImportError:
     import unittest
 
+# Use subprocess32 if available
+try:
+    import subprocess32 as subprocess
+except:
+    import subprocess as subprocess
 
-from invoke import run
+
+def check_output(*args, **kwargs):
+    """Subprocess check_output, but prints commands and output by default.
+    Also allows printing of error message for helpful debugging.
+
+    Use print_all=False to turn off all printing."""
+    print_all = kwargs.pop('print_all', None)
+    if print_all is not None:
+        print_in = print_all
+        print_out = print_all
+    else:
+        print_in = kwargs.pop('print_in', True)
+        print_out = kwargs.pop('print_out', True)
+
+    if print_in:
+        print('')
+        print(' '.join(args[0]))
+
+    try:
+        out_bytes = subprocess.check_output(*args, **kwargs)
+        out_lines = out_bytes.decode('utf-8').splitlines()
+    except subprocess.CalledProcessError as e:
+        # Wrap in try/except so that check_output can print
+        raise e
+
+    if print_out:
+        for line in out_lines:
+            print(line)
+
+    return out_lines
 
 windows = platform.system() == 'Windows'
 
-git = 'git.cmd' if windows else 'git'
+def find_git_cmd(windows):
+    """Determine whether the git command is git or git.cmd on Windows.
+    This changed in version 1.8.3"""
+    git = 'git'
+
+    if windows:
+        try:
+            check_output([git, '--version'])
+        except subprocess.CalledProcessError:
+            try:
+                git = 'git.cmd'
+                check_output([git, '--version'])
+            except subprocess.CalledProcessError:
+                msg = "git does not appear to be on your path."
+                raise subprocess.CalledProcessError(msg)
+
+    return git
+
+git = find_git_cmd(windows)
 
 
 def rm_rf(*args):
@@ -40,22 +92,22 @@ class TestCookieCutterSciPackage(unittest.TestCase):
 
     def test_integration(self):
         os.chdir(str(self.dir))
-        run('cookiecutter "{0}" --no-input'.format(str(self.cookiecutter_dir)))
+        check_output(['cookiecutter', str(self.cookiecutter_dir), '--no-input'])
         os.chdir('myscipkg')
-        run('git init')
-        run('git add -A')
-        run('git commit -a -m "Test commit"')
-        run('git tag 0.1')
+        check_output(['git', 'init'])
+        check_output(['git', 'add', '-A'])
+        check_output(['git', 'commit', '-a', '-m', 'Test commit'])
+        check_output(['git', 'tag', '0.1'])
 
-        run('python setup.py install')
+        check_output(['python', 'setup.py', 'install'])
 
-        version_out = run('python setup.py --version')
-        version = version_out.stdout.strip('\n').strip('\r')
-        expversion = '0.1'
+        version_lines = check_output(['python', 'setup.py', '--version'])
+        version = version_lines[0]
+        expversion = u'0.1'
         self.assertEqual(version, expversion)
 
-        run('python setup.py test')
-        run('invoke build_docs')
+        check_output(['python', 'setup.py', 'test'])
+        check_output(['invoke', 'build_docs'])
 
 
 if __name__ == '__main__':
