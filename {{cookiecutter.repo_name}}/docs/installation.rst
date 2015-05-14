@@ -8,6 +8,6 @@ At the command line via pip::
 
 Or install the latest GitHub version using::
 
-    $ git clone https://github.com/{ cookiecutter.github_username }}/{{ cookiecutter.repo_name }}.git
+    $ git clone https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.repo_name }}.git
     $ cd {{ cookiecutter.repo_name }}
     $ python setup.py install
